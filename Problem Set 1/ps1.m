@@ -16,6 +16,8 @@ digi_put = @(St, K) (St < K);
 
 St = 0:.001:3;
 
+return_ylim = @(s) [min(s)-.05*(max(s)-min(s)) max(s)+.05*(max(s)-min(s))];
+
 
 % a
 
@@ -33,32 +35,28 @@ plot(St, long_call);
 title("Long Call (\it{K}=" + K + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(long_call)-.05*(max(long_call)-min(long_call)) ...
-    max(long_call)+.05*(max(long_call)-min(long_call))]);
+ylim(return_ylim(long_call));
 
 subplot(2, 2, 2);
 plot(St, long_put);
 title("Long Put (\it{K}=" + K + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(long_put)-.05*(max(long_put)-min(long_put)) ...
-    max(long_put)+.05*(max(long_put)-min(long_put))]);
+ylim(return_ylim(long_put));
 
 subplot(2, 2, 3);
 plot(St, short_call);
 title("Short Call (\it{K}=" + K + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(short_call)-.05*(max(short_call)-min(short_call)) ...
-    max(short_call)+.05*(max(short_call)-min(short_call))]);
+ylim(return_ylim(short_call));
 
 subplot(2, 2, 4);
 plot(St, short_put);
 title("Short Put (\it{K}=" + K + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(short_put)-.05*(max(short_put)-min(short_put)) ...
-    max(short_put)+.05*(max(short_put)-min(short_put))]);
+ylim(return_ylim(short_put));
 
 
 % b
@@ -75,16 +73,14 @@ plot(St, straddle_emp);
 title("Straddle (\it{K}=" + K + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(straddle_emp)-.05*(max(straddle_emp)-min(straddle_emp)) ...
-    max(straddle_emp)+.05*(max(straddle_emp)-min(straddle_emp))]);
+ylim(return_ylim(straddle_emp));
 
 subplot(1, 2, 2);
 plot(St, straddle_theo);
 title("\it{V}(\it{S_{T}}) = \it{|S_{T} - K|} (\it{K}=" + K + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(straddle_theo)-.05*(max(straddle_theo)-min(straddle_theo)) ...
-    max(straddle_theo)+.05*(max(straddle_theo)-min(straddle_theo))]);
+ylim(return_ylim(straddle_theo));
 
 assert(isequal(straddle_emp, straddle_theo));
 
@@ -103,8 +99,7 @@ plot(St, call_put_spread);
 title("Call-Put Spread (\it{K_{1}}=" + K1 + ", \it{K_{2}}=" + K2 + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(call_put_spread)-.05*(max(call_put_spread)-min(call_put_spread)) ...
-    max(call_put_spread)+.05*(max(call_put_spread)-min(call_put_spread))]);
+ylim(return_ylim(call_put_spread));
 
 % d
 
@@ -132,8 +127,7 @@ for i = 1:numel(lambda)
         ", \it{K*}=" + K_star(i) + ")");
     xlabel("\it{S_{T}}");
     ylabel("\it{V}(\it{S_{T}})");
-    ylim([min(butterfly)-.05*(max(butterfly)-min(butterfly)) ...
-        max(butterfly)+.05*(max(butterfly)-min(butterfly))]);
+    ylim(return_ylim(butterfly));
 end
 
 
@@ -154,8 +148,7 @@ title("Call Ladder (\it{K_{1}}=" + K1 + ...
     ", \it{K_{3}}=" + K3 + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(call_ladder)-.05*(max(call_ladder)-min(call_ladder)) ...
-    max(call_ladder)+.05*(max(call_ladder)-min(call_ladder))]);
+ylim(return_ylim(call_ladder));
 
 
 % f
@@ -173,5 +166,4 @@ title("Digital Call Spread (\it{K_{1}}=" + K1 + ...
     ", \it{K_{2}}=" + K2 + ")")
 xlabel("\it{S_{T}}");
 ylabel("\it{V}(\it{S_{T}})");
-ylim([min(digi_call_spread)-.05*(max(digi_call_spread)-min(digi_call_spread)) ...
-    max(digi_call_spread)+.05*(max(digi_call_spread)-min(digi_call_spread))]);
+ylim(return_ylim(digi_call_spread));
