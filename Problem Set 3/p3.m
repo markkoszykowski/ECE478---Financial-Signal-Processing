@@ -152,8 +152,8 @@ V0 = sum(V_tilde .* PN_tilde);
 
 n = 10;
 
-[SnH, PnH_tilde] = binomialdistribution(S0 * u ^ n, u, d, p_tilde, q_tilde, N - n, tolerance);
-[SnT, PnT_tilde] = binomialdistribution(S0 * d ^ n, u, d, p_tilde, q_tilde, N - n, tolerance);
+[SnH, PnH_tilde] = binomialdistribution(S0*u^n, u, d, p_tilde, q_tilde, N-n, tolerance);
+[SnT, PnT_tilde] = binomialdistribution(S0*d^n, u, d, p_tilde, q_tilde, N-n, tolerance);
 
 VnH_tilde = tilde(V(SnH, K), r, N - n);
 VnT_tilde = tilde(V(SnT, K), r, N - n);
