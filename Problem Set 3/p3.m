@@ -160,12 +160,11 @@ p0 = [0.9 1.1];
 S0p0s = zeros(size(p0));
 V0p0s = zeros(size(p0));
 for i = 1:length(p0)
-    [SNp0, PNp0] = binomialdistribution(S0, u, d, p0(i) * p_tilde, ...
-        1 - (p0(i) * p_tilde), N, tolerance);
+    [SNp0, PNp0] = binomialdistribution(S0, u, d, p0(i)*p_tilde, ...
+        1 - (p0(i)*p_tilde), N, tolerance);
     S0p0s(i) = sum(tilde(SNp0, r, N) .* PNp0);
 
-    Vp0_tilde = tilde(V(SNp0, K), r, N);
-    V0p0s(i) = sum(Vp0_tilde .* PNp0);
+    V0p0s(i) = sum(tilde(V(SNp0, K), r, N) .* PNp0);
 end
 
 M = [100 1000 10000 100000];
