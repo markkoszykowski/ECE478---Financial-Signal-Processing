@@ -64,8 +64,7 @@ q_tilde = (u - (1 + r)) / (u - d);
 [~, Pn_tilde] = distribution(S0, u, d, p_tilde, q_tilde, N, tolerance);
 disp(table(Sn.', Pn_tilde.', 'VariableNames', {'Sn', 'Pn_tilde'}));
 
-V_tilde = tilde(V(Sn, K), r, N);
-V0 = sum(V_tilde .* Pn_tilde);
+V0 = sum(tilde(V(Sn, K), r, N) .* Pn_tilde);
 disp(table(S0, u, d, r, p, q, p_tilde, q_tilde, N, K, V0));
 
 % b
@@ -147,18 +146,15 @@ q_tilde = (u - (1 + r)) / (u - d);
 
 K = sum(SN .* PN_tilde);
 
-V_tilde = tilde(V(SN, K), r, N);
-V0 = sum(V_tilde .* PN_tilde);
+V0 = sum(tilde(V(SN, K), r, N) .* PN_tilde);
 
 n = 10;
 
 [SnH, PnH_tilde] = binomialdistribution(S0*u^n, u, d, p_tilde, q_tilde, N-n, tolerance);
 [SnT, PnT_tilde] = binomialdistribution(S0*d^n, u, d, p_tilde, q_tilde, N-n, tolerance);
 
-VnH_tilde = tilde(V(SnH, K), r, N - n);
-VnT_tilde = tilde(V(SnT, K), r, N - n);
-VnH = sum(VnH_tilde .* PnH_tilde);
-VnT = sum(VnT_tilde .* PnT_tilde);
+VnH = sum(tilde(V(SnH, K), r, N-n) .* PnH_tilde);
+VnT = sum(tilde(V(SnT, K), r, N-n) .* PnT_tilde);
 
 p0 = [0.9 1.1];
 S0p0s = zeros(size(p0));
