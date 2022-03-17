@@ -73,7 +73,7 @@ disp(newline);disp("2b)");
 Sn = pickrandom(Sn, Pn, tolerance);
 
 [Delta_n, Vn, Mn] = replicateonestep(V, Sn, u, d, r, K, tolerance);
-assert(abs(Vn - tilde(sum([V(u*Sn, K) V(d*Sn, K)] .* [p_tilde q_tilde]), r, 1)) <= tolerance, ...
+assert(abs(Vn - sum(tilde([V(u*Sn, K) V(d*Sn, K)], r, 1) .* [p_tilde q_tilde])) <= tolerance, ...
     "Wealth equation did not work");
 
 disp(table(Sn, Delta_n, Vn, Mn))
@@ -107,7 +107,7 @@ for i = size(Delta_n_omega, 2):-1:1
         repelem(Vn_omega(1+skip:skip*2:end, i+1), skip*2, 1), repelem(Vn_omega(1:skip*2:end, i+1), skip*2, 1));
 end
 
-assert(all(abs(Vn_omega(:, 1) - tilde(sum(V(SN, K) .* PN_tilde), r, N)) <= tolerance, "all"), ...
+assert(all(abs(Vn_omega(:, 1) - sum(tilde(V(SN, K), r, N) .* PN_tilde)) <= tolerance, "all"), ...
     "Wealth equation did not work");
 
 V0 = Vn_omega(:, 1);
@@ -121,7 +121,7 @@ disp(table(omega_n, Delta_n_omega, Mn_omega, V0));
 % a
 disp(newline);disp("3a)");
 
-V0 = tilde(sum(V(SN, K) .* PN_tilde), r, N);
+V0 = sum(tilde(V(SN, K), r, N) .* PN_tilde);
 
 M = [1 5 10 32];
 
