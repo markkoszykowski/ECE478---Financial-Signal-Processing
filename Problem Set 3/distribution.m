@@ -4,8 +4,8 @@ function [Sn, Pn] = distribution(S0, u, d, p, q, n, tolerance)
     % sort for numerically stable discrete values
     permutes = sort(generatepermutes(n), 2, "descend");
 
-    ud = permutes*u + ~permutes*d;
-    pq = permutes*p + ~permutes*q;
+    ud = permutes * u + ~permutes * d;
+    pq = permutes * p + ~permutes * q;
     
     dist = [S0*prod(ud, 2).' ; prod(pq, 2).'];
 
