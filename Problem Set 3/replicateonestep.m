@@ -22,7 +22,7 @@ function [Delta_n, Xn, Mn] = replicateonestep(V, Sn, u, d, r, K, tolerance, Xn_1
     Xn = (Xn_1H - Delta_n .* a) / r;
 
     if any(Delta_n < 0, "all")
-        disp("    Shorting derivative");
+        disp("    Shorting stock");
     end
 
     Mn = Xn - Delta_n .* Sn;
