@@ -1,5 +1,5 @@
 function [St, HT] = generatemrandompaths(S0, u, d, p, q, n, m, tolerance)
-% Generates m random walks of H or T coin flips (up to down stock movement)
+% Generates m random walks of H or T coin flips (up or down stock movement)
 % with respective probabilities p and q and computes stock value over walks
     assert(abs(1 - (p + q)) <= tolerance, "'p' and 'q' values do not reflect the probabilities of a valid Bernoulli trial");
     

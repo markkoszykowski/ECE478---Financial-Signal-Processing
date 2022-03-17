@@ -1,5 +1,5 @@
 function [Delta_n, Xn, Mn] = replicateonestep(V, Sn, u, d, r, K, tolerance, Xn_1H, Xn_1T)
-% Computes value of asset, number of shares of underlying assets, and 
+% Computes value of asset, number of shares of underlying stock, and 
 % number of shares in the money market at a time period using replicating 
 % portfolio and wealth equation
     r = 1 + r;

@@ -1,5 +1,5 @@
 function [Sn, Pn] = distribution(S0, u, d, p, q, n, tolerance)
-% Returns stock values and their probabilities for a given time using by
+% Returns stock values and their probabilities for a given time by
 % evaluating all possible paths
     assert(abs(1 - (p + q)) <= tolerance, "'p' and 'q' values do not reflect the probabilities of a valid Bernoulli trial");
 

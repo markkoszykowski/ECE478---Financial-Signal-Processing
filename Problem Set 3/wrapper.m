@@ -1,8 +1,8 @@
 function [S0, V0] = wrapper(V, S0, u, d, r, K, n, m, tolerance, p)
 % Computes value of underlying stock and asset at an initial provided time
 % through a Monte Carlo simulation
-    % if probability of H coin flip (up stock movement) generate random
-    % walks with that, otherwise use risk neutral probabilities
+    % if probability of H coin flip (up stock movement) provided generate 
+    % random walks with that, otherwise use risk neutral probabilities
     if ~exist("p", "var")
         [Sn, ~] = generatemrandompaths(S0, u, d, ...
             ((1 + r) - d) / (u - d), (u - (1 + r)) / (u - d), n, m, tolerance);

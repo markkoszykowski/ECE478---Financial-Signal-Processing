@@ -109,7 +109,7 @@ Delta_n_omega = zeros(size(omega_n));
 Vn_omega = zeros(size(Sn));
 Mn_omega = zeros(size(omega_n));
 
-% determine value of asset V at time 0 recursively with wealth equation
+% determine value of asset V at initial time recursively with wealth equation
 Vn_omega(:, end) = V(Sn(:, end), K);
 for i = size(Delta_n_omega, 2):-1:1
     fprintf("n=%d:\n", i-1);
@@ -128,7 +128,7 @@ omega_n = char('H' * omega_n + 'T' * ~omega_n);
 
 disp(table(omega_n, Delta_n_omega, Mn_omega, V0));
 % There were many instances of borrowing from the money market along all
-% possible walk however there was no shorting of the stock
+% possible walk however there was no shorting of the stock.
 
 %% 3
 
@@ -178,7 +178,7 @@ n = 10;
 VnH = sum(tilde(V(SnH, K), r, N-n) .* PnH_tilde);
 VnT = sum(tilde(V(SnT, K), r, N-n) .* PnT_tilde);
 
-% compute actual values of stock at initial time using probabilities of H 
+% compute values of stock at initial time using actual probabilities of H 
 % or T coin flip (up or down stock movement)
 p0 = [0.9 1.1];
 S0p0s = zeros(size(p0));
