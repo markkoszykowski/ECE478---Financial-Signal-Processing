@@ -159,12 +159,12 @@ VnT = sum(tilde(V(SnT, K), r, N-n) .* PnT_tilde);
 p0 = [0.9 1.1];
 S0p0s = zeros(size(p0));
 V0p0s = zeros(size(p0));
-for i = 1:length(p0)
-    [SNp0, PNp0] = binomialdistribution(S0, u, d, p0(i)*p_tilde, ...
-        1 - (p0(i)*p_tilde), N, tolerance);
-    S0p0s(i) = sum(tilde(SNp0, r, N) .* PNp0);
+for p_tilde_scalar = p0
+    [SNp0, PNp0] = binomialdistribution(S0, u, d, p_tilde_scalar*p_tilde, ...
+        1 - (p_tilde_scalar*p_tilde), N, tolerance);
+    S0p0s(p0 == p_tilde_scalar) = sum(tilde(SNp0, r, N) .* PNp0);
 
-    V0p0s(i) = sum(tilde(V(SNp0, K), r, N) .* PNp0);
+    V0p0s(p0 == p_tilde_scalar) = sum(tilde(V(SNp0, K), r, N) .* PNp0);
 end
 
 M = [100 1000 10000 100000];
@@ -176,8 +176,8 @@ for m = M
     [S0_est, V0_est] = wrapper(V, S0, u, d, r, K, N, m, tolerance);
     estimates = [estimates ; table(m, S0, S0_est, u, d, r, K, N, V0_est, V0)];
 
-    [~, VnH_est] = wrapper(V, S0 * u ^ n, u, d, r, K, N - n, m, tolerance);
-    [~, VnT_est] = wrapper(V, S0 * d ^ n, u, d, r, K, N - n, m, tolerance);
+    [~, VnH_est] = wrapper(V, S0*u^n, u, d, r, K, N-n, m, tolerance);
+    [~, VnT_est] = wrapper(V, S0*d^n, u, d, r, K, N-n, m, tolerance);
     Vn_estimates = [Vn_estimates ; table(m, S0, u, d, r, K, N, n, VnH_est, VnH, VnT_est, VnT)];
 
     for p_tilde_scalar = p0
@@ -185,8 +185,8 @@ for m = M
         S0p0 = S0p0s(p0 == p_tilde_scalar);
         V0p0 = V0p0s(p0 == p_tilde_scalar);
         [S0_est_p0, V0_est_p0] = wrapper(V, S0, u, d, r, K, N, m, tolerance, p);
-        actual_p_estimates = [actual_p_estimates ; table(m, p_tilde_scalar, p_tilde, p, S0, S0_est_p0, ...
-            S0p0, u, d, r, K, N, V0_est_p0, V0p0, V0)];
+        actual_p_estimates = [actual_p_estimates ; table(m, p_tilde_scalar, p_tilde, p, ...
+            S0, S0_est_p0, S0p0, u, d, r, K, N, V0_est_p0, V0p0, V0)];
     end
 end
 disp(estimates);
