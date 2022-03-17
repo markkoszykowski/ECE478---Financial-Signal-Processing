@@ -190,7 +190,8 @@ for m = M
         S0p0 = S0p0s(p0 == p_tilde_scalar);
         V0p0 = V0p0s(p0 == p_tilde_scalar);
         [S0_est_p0, V0_est_p0] = wrapper(V, S0, u, d, r, K, N, m, tolerance, p);
-        actual_p_estimates = [actual_p_estimates ; table(m, p_tilde_scalar, p_tilde, p, S0, S0_est_p0, S0p0, u, d, r, K, N, V0_est_p0, V0p0, V0)];
+        actual_p_estimates = [actual_p_estimates ; table(m, p_tilde_scalar, p_tilde, p, S0, S0_est_p0, ...
+            S0p0, u, d, r, K, N, V0_est_p0, V0p0, V0)];
     end
 end
 disp(estimates);
