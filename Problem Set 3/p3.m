@@ -73,7 +73,7 @@ disp(newline);disp("2b)");
 Sn = pickrandom(Sn, Pn, tolerance);
 
 [Delta_n, Vn, Mn] = replicateonestep(V, Sn, u, d, r, K, tolerance);
-assert(abs(Vn - tilde(sum([V(u * Sn, K) V(d * Sn, K)] .* [p_tilde q_tilde]), r, 1)) <= tolerance, ...
+assert(abs(Vn - tilde(sum([V(u*Sn, K) V(d*Sn, K)] .* [p_tilde q_tilde]), r, 1)) <= tolerance, ...
     "Wealth equation did not work");
 
 disp(table(Sn, Delta_n, Vn, Mn))
@@ -134,11 +134,11 @@ disp(estimates);
 
 % b
 disp(newline);disp("3b)");
-N = 100;
-
 u = 1 + 5e-3;
 d = 1 + 1e-4;
 r = 1e-3;
+
+N = 100;
 
 p_tilde = ((1 + r) - d) / (u - d);
 q_tilde = (u - (1 + r)) / (u - d);
