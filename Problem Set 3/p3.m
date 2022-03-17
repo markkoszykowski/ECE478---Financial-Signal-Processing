@@ -96,14 +96,14 @@ K = sum(SN .* PN_tilde);
 [Sn, omega_n] = generatepaths(S0, u, d, N);
 
 Delta_n_omega = zeros(size(omega_n));
-Mn = zeros(size(omega_n));
 Vn_omega = zeros(size(Sn));
+Mn_omega = zeros(size(omega_n));
 
 Vn_omega(:, end) = V(Sn(:, end), K);
 for i = size(Delta_n_omega, 2):-1:1
     fprintf("n=%d:\n", i-1);
     skip = 2^(size(Vn_omega, 2) - i - 1);
-    [Delta_n_omega(:, i), Vn_omega(:, i), Mn(:, i)] = replicateonestep(V, Sn(:, i), u, d, r, K, tolerance, ...
+    [Delta_n_omega(:, i), Vn_omega(:, i), Mn_omega(:, i)] = replicateonestep(V, Sn(:, i), u, d, r, K, tolerance, ...
         repelem(Vn_omega(1+skip:skip*2:end, i+1), skip*2, 1), repelem(Vn_omega(1:skip*2:end, i+1), skip*2, 1));
 end
 
@@ -113,7 +113,7 @@ assert(all(abs(Vn_omega(:, 1) - tilde(sum(V(SN, K) .* PN_tilde), r, N)) <= toler
 V0 = Vn_omega(:, 1);
 omega_n = char('H' * omega_n + 'T' * ~omega_n);
 
-disp(table(omega_n, Delta_n_omega, Mn, V0));
+disp(table(omega_n, Delta_n_omega, Mn_omega, V0));
 
 %% 3
 
