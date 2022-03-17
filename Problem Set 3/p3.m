@@ -96,7 +96,8 @@ N = 5;
 p_tilde = ((1 + r) - d) / (u - d);
 q_tilde = (u - (1 + r)) / (u - d);
 
-% generate risk netural probability distribution
+% generate risk netural probability distribution by generating all possible
+% random walks
 [SN, PN_tilde] = distribution(S0, u, d, p_tilde, q_tilde, N, tolerance);
 
 K = sum(SN .* PN_tilde);
