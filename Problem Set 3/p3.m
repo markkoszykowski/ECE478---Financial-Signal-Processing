@@ -49,7 +49,7 @@ cn = coeffs(1);
 dn = coeffs(2);
 
 assert(all(abs(Pn - Pyn) <= tolerance & ...
-    abs(Rn - (cn*Yn + dn)) <= tolerance), "Distribution of St is not log-binomial");
+    abs(Rn - (cn*Yn + dn)) <= tolerance, "all"), "Distribution of St is not log-binomial");
 
 
 %% 2
