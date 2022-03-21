@@ -26,7 +26,7 @@ for i = 1:size(W, 1)
     hold on;
 end
 hold off;
-title("Weiner Process (\it{\mu}=" + mean(W(:, end)) + ", \it{\sigma}^2=" + std(W(:, end))^2 + ")");
+title("Weiner Process (\it{\mu}=" + mean(W(:, end)) + ", \it{\sigma}^2=" + var(W(:, end)) + ")");
 xlabel("\it{t}");
 ylabel("\it{W}(\it{t})");
 %% 1
@@ -59,10 +59,10 @@ S_rn(:, 1) = S0;
 S_remaining = 1:M;
 S_rn_remaining = 1:M;
 for n = 1:N
-    [S, dW, S_remaining] = dSanddiscard(S, n+1, alpha*S(:, n), sigma*S(:, n), ...
+    [S, dW, S_remaining] = dXanddiscard(S, n+1, alpha*S(:, n), sigma*S(:, n), ...
         dt, dW, S_remaining);
 
-    [S_rn, dW_tilde, S_rn_remaining] = dSanddiscard(S_rn, n+1, r*S_rn(:, n), ...
+    [S_rn, dW_tilde, S_rn_remaining] = dXanddiscard(S_rn, n+1, r*S_rn(:, n), ...
         sigma*S_rn(:, n), dt, dW_tilde, S_rn_remaining);
 end
 
@@ -124,7 +124,7 @@ end
 
 S_N_2_N_remaining = 1:(length(i)*M);
 for n = 1:(N - N/2)
-    [S_N_2_N, dW_tilde, S_N_2_N_remaining] = dSanddiscard(S_N_2_N, n+1, ...
+    [S_N_2_N, dW_tilde, S_N_2_N_remaining] = dXanddiscard(S_N_2_N, n+1, ...
         r*S_N_2_N(:, n), sigma*S_N_2_N(:, n), dt, dW_tilde, S_N_2_N_remaining);
 end
 
@@ -141,3 +141,115 @@ xlabel("\it{S}[\it{N}/2]");
 ylabel("\it{V}[\it{N}/2]");
 
 disp(table(i, Si_N_2, Vi_N_2_BSM, Vi_N_2_MC));
+%% 2
+
+E_Rt = @(alpha, beta, r, t) (exp(-beta * t) * r + (alpha / beta) * (1 - exp(-beta * t)));
+var_Rt = @(alpha, beta, sigma, r, t) ((sigma ^ 2 / beta) * r * (exp(-beta * t) - exp(-2 * beta * t)) + ...
+    ((alpha * sigma ^ 2) / (2 * beta ^ 2)) * (1 - 2 * exp(-beta * t) - exp(-2 * beta * t)));
+
+
+% a
+beta = 1;
+alpha = 0.10 * beta;
+r = 0.05;
+sigma = 0.5;
+
+assert(r > 0, "Initial condition was not met for Cox-Ingersoll-Ross Interest Rate Model");
+
+M = 1000;
+
+expected_successes = 50/1000;
+
+total_M = M / expected_successes;
+
+delta = 0.01;
+
+T = 10;
+t = 0:delta:T;
+
+dt = delta;
+assert(all(abs(diff(t) - dt) <= tolerance, "all"), "'dt' does not match 'delta'")
+
+N = T / delta;
+
+W = weiner(N, delta, total_M);
+dW = diff(W, 1, 2);
+
+R = zeros(total_M, N+1);
+R(:, 1) = r;
+
+R_remaining = 1:total_M;
+for n = 1:N
+    [R, dW, R_remaining] = dXanddiscard(R, n+1, alpha - beta*R(:, n), ...
+        sigma*sqrt(R(:, n)), dt, dW, R_remaining);
+end
+
+figure;
+subplot(1, 2, 1);
+for i = 1:size(R, 1)
+    plot(t, R(i, :));
+    hold on;
+end
+hold off;
+xlim([min(t) max(t)]);
+title("Cox-Ingersoll-Ross Interest Rate Model (\it{R}(0)=" + r + ...
+    ", \it{\alpha}=" + alpha + ", \it{\beta}=" + beta + ", \it{\sigma}=" + sigma + ")");
+xlabel("\it{t}");
+ylabel("\it{R}(\it{t})");
+
+disp(newline + "Cox-Ingersoll-Ross Interest Rate Model discretized success rate: " + ...
+    length(R_remaining) + "/" + total_M + " (" + length(R_remaining)/total_M + ")");
+
+% b
+i = 1:10;
+
+subplot(1, 2, 2);
+for j = i
+    plot(t, R(j, :));
+    hold on;
+end
+hold off;
+xlim([min(t) max(t)]);
+title("Cox-Ingersoll-Ross Interest Rate Model using first " + max(i) + ...
+    " paths (\it{R}(0)=" + r + ", \it{\alpha}=" + alpha + ", \it{\beta}=" + ...
+    beta + ", \it{\sigma}=" + sigma + ")");
+xlabel("\it{t}");
+ylabel("\it{R}(\it{t})");
+
+% c
+ts = [1 ; 10];
+
+E_Rt_exp = zeros(size(ts));
+var_Rt_exp = zeros(size(ts));
+E_Rt_MC = zeros(size(ts));
+var_Rt_MC = zeros(size(ts));
+for tau = ts.'
+    E_Rt_exp(ts == tau) = E_Rt(alpha, beta, r, tau);
+    var_Rt_exp(ts == tau) = var_Rt(alpha, beta, sigma, r, tau);
+
+    E_Rt_MC(ts == tau) = mean(R(:, t == tau));
+    var_Rt_MC(ts == tau) = var(R(:, t == tau));
+end
+
+disp(table(ts, E_Rt_exp, E_Rt_MC, var_Rt_exp, var_Rt_MC));
+
+figure;
+subplot(1, 2, 1);
+for i = 1:size(W, 1)
+    plot(t, W(i, :));
+    hold on;
+end
+hold off;
+title("All Weiner Processes Used(\it{\mu}=" + mean(W(:, end)) + ", \it{\sigma}^2=" + var(W(:, end)) + ")");
+xlabel("\it{t}");
+ylabel("\it{W}(\it{t})");
+
+subplot(1, 2, 2);
+for i = R_remaining
+    plot(t, W(i, :));
+    hold on;
+end
+hold off;
+title("Surviving Weiner Processes (\it{\mu}=" + mean(W(R_remaining, end)) + ", \it{\sigma}^2=" + var(W(R_remaining, end)) + ")");
+xlabel("\it{t}");
+ylabel("\it{W}(\it{t})");
