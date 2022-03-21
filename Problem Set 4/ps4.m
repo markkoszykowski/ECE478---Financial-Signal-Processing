@@ -60,10 +60,10 @@ S_remaining = 1:M;
 S_rn_remaining = 1:M;
 for n = 1:N
     [S, dW, S_remaining] = dSanddiscard(S, n+1, alpha*S(:, n), sigma*S(:, n), ...
-        delta, dW, S_remaining);
+        dt, dW, S_remaining);
 
     [S_rn, dW_tilde, S_rn_remaining] = dSanddiscard(S_rn, n+1, r*S_rn(:, n), ...
-        sigma*S_rn(:, n), delta, dW_tilde, S_rn_remaining);
+        sigma*S_rn(:, n), dt, dW_tilde, S_rn_remaining);
 end
 
 figure;
@@ -125,7 +125,7 @@ end
 S_N_2_N_remaining = 1:(length(i)*M);
 for n = 1:(N - N/2)
     [S_N_2_N, dW_tilde, S_N_2_N_remaining] = dSanddiscard(S_N_2_N, n+1, ...
-        r*S_N_2_N(:, n), sigma*S_N_2_N(:, n), delta, dW_tilde, S_N_2_N_remaining);
+        r*S_N_2_N(:, n), sigma*S_N_2_N(:, n), dt, dW_tilde, S_N_2_N_remaining);
 end
 
 Vi_N_2_MC = zeros(size(Si_N_2));
