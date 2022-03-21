@@ -21,4 +21,3 @@ function [X, dW, paths] = dXanddiscard(X, n, beta, gamma, dt, dW, paths, verbose
     end
     paths = paths(Xn_1 > 0);
 end
-
