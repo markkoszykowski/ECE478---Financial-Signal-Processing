@@ -21,7 +21,7 @@ tolerance = 1;
 tolerance = eps * 10 ^ tolerance;
 %% Check Wiener Process
 
-W = wiener(N, delta, 1000);
+[~, W] = wiener(N, delta, 1000, 1);
 
 figure;
 for i = 1:size(W, 1)
@@ -49,11 +49,9 @@ assert(all(abs(diff(t) - dt) <= tolerance, "all"), "'dt' does not match 'delta'"
 
 % generate differential of standard Wiener process and risk-neutral Wiener
 % process
-W = wiener(N, delta, M);
-dW = diff(W, 1, 2);
+dW = wiener(N, delta, M);
 
-W_tilde = wiener(N, delta, M);
-dW_tilde = diff(W_tilde, 1, 2);
+dW_tilde = wiener(N, delta, M);
 
 % b
 S = zeros(M, N+1);
@@ -81,7 +79,8 @@ end
 hold off;
 xlim([min(t) max(t)]);
 title("\it{S}_{\it{t}} (\it{S}(0)=" + S0 + ", \it{\alpha}=" + alpha + ...
-    ", \it{\sigma}=" + sigma + ")");
+    ", \it{\sigma}=" + sigma + ") (\it{E}(\it{S}(\it{T})=" + mean(S(:, end)) + ...
+    ", \it{var}(\it{S}(\it{T}))=" + var(S(:, end)) + ")");
 xlabel("\it{t}");
 ylabel("\it{S}(\it{t})");
 
@@ -92,7 +91,9 @@ for i = 1:size(S_rn, 1)
 end
 hold off;
 xlim([min(t) max(t)]);
-title("\it{S}_{\it{t}} Risk Neutral (\Theta=" + theta + ", \it{r}=" + r + ")");
+title("\it{S}_{\it{t}} Risk Neutral (\Theta=" + theta + ", \it{r}=" + r + ...
+    ") (\it{E}(\it{S}(\it{T})=" + mean(S_rn(:, end)) + ...
+    ", \it{var}(\it{S}(\it{T}))=" + var(S_rn(:, end)) + ")");
 xlabel("\it{t}");
 ylabel("\it{S}(\it{t})");
 
@@ -124,8 +125,7 @@ Si_N_2 = S(i, N/2 + 1);
 Vi_N_2_BSM = BSM(T - t(N/2 + 1), Si_N_2, K, r, sigma);
 
 % generate M new Wiener processes for each of the i paths
-W_tilde = wiener(N - N/2, delta, length(Si_N_2)*M);
-dW_tilde = diff(W_tilde, 1, 2);
+dW_tilde = wiener(N - N/2, delta, length(Si_N_2)*M);
 
 S_N_2_N = zeros(length(Si_N_2)*M, N/2 + 1);
 for j = i.'
@@ -189,8 +189,8 @@ assert(all(abs(diff(t) - dt) <= tolerance, "all"), "'dt' does not match 'delta'"
 N = T / delta;
 
 % generate new Wiener processes for interest rate modelling
-W = wiener(N, delta, total_M);
-dW = diff(W, 1, 2);
+[dW, W] = wiener(N, delta, total_M, 1);
+assert(all(abs(dW - diff(W, 1, 2)) <= tolerance, "all"), "'dW's do not match");
 
 R = zeros(total_M, N+1);
 R(:, 1) = r;
@@ -275,3 +275,13 @@ hold off;
 title("Surviving Wiener Processes (\it{\mu}=" + mean(W(R_remaining, end)) + ", \it{\sigma}^2=" + var(W(R_remaining, end)) + ")");
 xlabel("\it{t}");
 ylabel("\it{W}(\it{t})");
+%% 3
+
+
+% When simulating a geometric Brownian motion using its SDE, it is not
+% guaranteed that St > 0 a.s. even though in none of the runs that were
+% performed this property was not violated. While it's possible, it's not
+% expected that St will be negative because of the small propability that
+% that the magnitude of the random portion of the SDE (dW) will exceed the 
+% expected part (dt) and be negative multiple times in a row which would be
+% required for this model to become negative.
