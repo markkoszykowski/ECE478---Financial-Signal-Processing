@@ -1,4 +1,6 @@
 function [rts, at, bt, ut, vt, sigma0] = getUnderlyingSignals(delta, G, A, b, a, nu, N, plotSignals)
+% Returns set of equations and underlying random signals that generate them
+% for equal given in Problem Set
     ut = filter(b, a, randn([1 N]));
 
     ba = [1];

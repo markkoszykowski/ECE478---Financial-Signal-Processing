@@ -1,4 +1,5 @@
 function plotAutoCrossCorrs(rts, M, vars, ys, titles)
+% Plots autocorrelation and crosscorrelation graphs for a matrix of signals
     figure;
     for i = 1:size(rts, 3)
         [rho1, lags1] = autocorr(rts(1, :, i), NumLags=M);

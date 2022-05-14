@@ -1,4 +1,6 @@
 function [a_LD, a_LS] = generateAR(rt, M, plotTitle)
+% Returns AR FIR filter coefficients using Levinson-Durbin recursion and a
+% Least-Squares approximation. Same code from main code for Question 2
     [rho, lags] = autocorr(rt, NumLags=M);
 
     figure;
