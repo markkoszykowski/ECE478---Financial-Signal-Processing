@@ -14,7 +14,8 @@ function [rts, at, bt, ut, vt, sigma0] = getUnderlyingSignals(delta, G, A, b, a,
     % generate random signal v(t) dependent on a(t)
     vt = [normrnd(0, sigma0, [1 N]); trnd(nu, [1 N]) / (sqrt(nu / (nu - 2)) / sigma0)];
 
-    % construct simple filter to generate b(t) from a(t) and v(t)
+    % construct simple filter to generate b(t) from a(t) and v(t) when v(t)
+    % is either Normal or Students' T
     bb = [1];
     ab = [1 -G(2, 2)];
     bt = zeros([2 N]);
