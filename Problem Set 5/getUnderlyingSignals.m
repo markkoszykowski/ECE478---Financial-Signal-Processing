@@ -1,8 +1,10 @@
 function [rts, at, bt, ut, vt, sigma0] = getUnderlyingSignals(delta, G, A, b, a, nu, N, plotSignals)
 % Returns set of equations and underlying random signals that generate them
 % for equal given in Problem Set
+    % first generate u(t)
     ut = filter(b, a, randn([1 N]));
 
+    % construct a simple filter to generate a(t) from u(t)
     ba = [1];
     aa = [1 -G(1, 1)];
 
@@ -10,8 +12,10 @@ function [rts, at, bt, ut, vt, sigma0] = getUnderlyingSignals(delta, G, A, b, a,
 
     sigma0 = sqrt((1 / 16) * mean(at.^2));
 
+    % generate random signal v(t) dependent on a(t)
     vt = [normrnd(0, sigma0, [1 N]); trnd(nu, [1 N]) / (sqrt(nu / (nu - 2)) / sigma0)];
 
+    % construct simple filter to generate b(t) from a(t) and v(t)
     bb = [1];
     ab = [1 -G(2, 2)];
 
@@ -20,6 +24,7 @@ function [rts, at, bt, ut, vt, sigma0] = getUnderlyingSignals(delta, G, A, b, a,
         bt(i, :) = filter(bb, ab, delta(2) + G(2, 1) * [0 at(1:end - 1)] + vt(i, :));
     end
 
+    % store combinations of r1 and r2 in matrix for later usage
     rts = zeros([2 N size(bt, 1)]);
     for i = 1:size(bt, 1)
         rts(:, :, i) = A * [at; bt(i, :)];
