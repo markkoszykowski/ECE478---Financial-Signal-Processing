@@ -114,7 +114,8 @@ Pm = F * C * F.';
 assert(all(abs(diag(Pm) - P) <= eps*1e1), "FCF' diagonal is not equal to prediction error powers");
 
 % display warning if LDL decomposition and Levinson-Durbin recursion do not
-% have analagous results
+% have analagous results - however they rarely give the same or similar
+% results
 if any(abs(F - L^-1) > eps*1e1, "all")
     disp("F matrix from Levinson-Durbin recursion is not equal to L^-1 from LDL decomposition");
 end
@@ -132,6 +133,12 @@ disp(fliplr(F(M + 1, :)));
 disp("AR coefficients from Least-Squares fit (M=" + M + "):");
 disp(a_LS);
 disp(newline);
+% g
+
+% The reflection coefficients are high for low values of M, sharply
+% decrease thereafter. The smaller these coefficients are, the better the
+% filter of length m performs since the reflection coefficients are
+% inversely related to the prediction error powers.
 %% 3
 
 
@@ -194,7 +201,7 @@ p = [0.2; 0.5];
 A = [3 4; 2 3];
 % a
 
-% simple linear scaling of entire equation and all constiuents
+% simple linear scaling of entire equation and all constituents
 deltaPrime = A * delta;
 GPrime = A * G;
 % b & c
