@@ -144,7 +144,6 @@ pARIMA = [0.99; pARMA];
 
 rtARIMA = filter(bARMA, aARIMA, vt);
 
-
 figure;
 plot(rtARMA, "DisplayName", "ARMA");
 hold on;
