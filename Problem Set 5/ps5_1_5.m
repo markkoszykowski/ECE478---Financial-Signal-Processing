@@ -123,9 +123,8 @@ if any(abs(diag(D) - P) > eps*1e1, "all")
 end
 % f
 
-% compute AR coefficients using built in Least-Squares approximation
+% compute AR coefficients using built with Least-Squares approximation
 a_LS = ar(rtARMA, M, "ls").A;
-
 
 disp(newline + "AR coefficients from Levinson-Durbin recursion (M=" + M + "):");
 disp(fliplr(F(M + 1, :)));
