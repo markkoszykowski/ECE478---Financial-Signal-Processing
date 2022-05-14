@@ -27,7 +27,6 @@ function [a_LD, a_LS] = generateAR(rt, M, plotTitle)
     disp(kappa.');
 
     Pm = F * C * F.';
-
     assert(all(abs(diag(Pm) - P) <= eps*1e1), "FCF' diagonal is not equal to prediction error powers");
 
     if any(abs(F - L^-1) > eps*1e1, "all")
