@@ -33,7 +33,7 @@ for distribution = heavyTailDistributions.keys
     samples = heavyTailDistributions(distribution);
 
     subplot(2, 2, i)
-    histogram(samples);
+    histogram(samples, "Normalization", "probability");
     title(distribution + " Distribution");
     xlabel("{\it x}");
     ylabel("{\it f(x)}");
